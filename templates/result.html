@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="panel">
+    <h2>Result — {{ event_type }} x {{ outcomes|length }}</h2>
+    <p>{% if stored %}<span class="pill">Saved to history</span>
+       {% else %}<span class="pill">Not stored</span>{% endif %}</p>
+
+    {% if outcomes|length <= 25 %}
+        <p>Outcomes:
+            {% for o in outcomes %}<code>{{ o }}</code> {% endfor %}
+        </p>
+    {% endif %}
+
+    <table>
+        <thead><tr><th>Outcome</th><th>Count</th></tr></thead>
+        <tbody>
+        {% for k, v in summary.items() %}
+            <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <p><a href="{{ url_for('index') }}">← Run another</a></p>
+</div>
+{% endblock %}
