@@ -44,7 +44,7 @@ class Event(ABC):
         }
     
 class Coin(Event):
-
+    # Coin event, implements perform method
     def __init__(self, p_heads: float = 0.5) -> None:
         if not 0.0 <= p_heads <= 1.0:
             raise ValueError("p_heads must be between 0 and 1")
@@ -52,13 +52,16 @@ class Coin(Event):
         self.type = self.label()
 
     def perform(self) -> str:
+        # Perform a randomized coin flip based on the probability of heads
         flip_result = "Heads" if random.random() < self.p_heads else "Tails"
         return flip_result
     
     def possible_outcomes(self) -> list[str]:
+        # Return possible outcomes for a coin flip
         return ["Heads", "Tails"]
     
     def label(self) -> str:
+        # Return a label for the coin based on its bias
         if self.p_heads == 0.5:
             return "Fair Coin"
         
@@ -66,6 +69,7 @@ class Coin(Event):
     
 
 class Die(Event):
+    # Die event, implements perform method
     def __init__(self, faces: int = 6) -> None:
         if faces < 4:
             raise ValueError("Die must have at least 4 faces")
@@ -73,16 +77,20 @@ class Die(Event):
         self.type = f"d{faces}"
 
     def perform(self) -> int:
-            return random.randint(1, self.faces)
+        # Perform a random selection from 1 to the number of faces on the die
+        return random.randint(1, self.faces)
         
     def possible_outcomes(self) -> list:
-            return list(range(1, self.faces + 1))
+        # Return possible outcomes for a die
+        return list(range(1, self.faces + 1))
         
     def label(self) -> str:
-            return f"d{self.faces}"
+        # Return standard label for die
+        return f"d{self.faces}"
         
     
 def event_factory(event_type: str, params: dict) -> Event:
+    # Factory function to create events based on type and parameters
     if event_type == "coin":
         return Coin(p_heads=params.get("p_heads", 0.5))
     elif event_type == "die":

@@ -12,6 +12,7 @@ app = Flask(__name__)
 # For DB integration https://flask.palletsprojects.com/en/stable/config/
 app.config['DATABASE'] = 'database.sqlite'
 database.init_app(app)
+# Apparently Flask needs a secret key for session management, included below
 app.secret_key = "secret-key-required-for-session-management"
 
 @app.before_request
@@ -67,6 +68,7 @@ def perform():
     # Create a simple summary of outcomes by counting occurrences of each outcome
     summary = dict(Counter(str(outcome) for outcome in outcomes))
 
+    # Once the event(s) have been performed, render the result template
     return render_template(
         "result.html",
         event_type=event_type,
@@ -76,8 +78,10 @@ def perform():
         stored=stored
     )
 
+
 @app.route("/tracking", methods=["POST"])
 def tracking():
+    # Set session tracking based on form input
     session_settings.set_tracking(request.form.get("track") == "on")
     flash(
         f"Tracking is now {'ON' if session_settings.is_track_enabled() else 'OFF'}.",
@@ -88,6 +92,7 @@ def tracking():
 
 @app.route("/history")
 def history():
+    # Set infrastructure for history page, which has the ability to view the db records
     label = request.args.get("label") or None
     rows = database.get_recent_records(label=label, limit=100)
     labels = database.get_known_labels()
@@ -101,6 +106,7 @@ def history():
 
 @app.route("/history/clear", methods=["POST"])
 def history_clear():
+    # Clear the history of the session
     deleted = database.clear_all_records()
     session_settings.clear_history()
     flash("Cleared all stored results for this session.", "info")
