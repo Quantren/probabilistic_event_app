@@ -13,8 +13,6 @@
        class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">Roll</a>
     <a href="{{ url_for('history') }}"
        class="nav-link {% if request.endpoint == 'history' %}active{% endif %}">History</a>
-    <a href="{{ url_for('distribution') }}"
-       class="nav-link {% if request.endpoint == 'distribution' %}active{% endif %}">Distribution</a> 
     </header>
     <main>
         {% with messages = get_flashed_messages(with_categories=true) %}

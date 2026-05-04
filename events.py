@@ -28,13 +28,13 @@ class Event(ABC):
     @abstractmethod
     def label(self) -> str:
         """
-        
+        Return label for event
         """
         pass
 
     def to_record(self, outcome: int | str) -> dict[str, str | int]:
         """
-        
+        Produce result in a standardized format as a dict
         """
         return {
             "type": self.event_type,
